@@ -187,6 +187,20 @@
   .foot{margin-top:26px;text-align:center;color:var(--faint);font-size:11.5px;line-height:1.6}
   .foot b{color:var(--muted);font-weight:600}
 
+  /* demo toast */
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);
+    background:var(--ink);color:#EAF1ED;
+    padding:12px 18px;border-radius:12px;
+    font-size:13px;font-weight:500;
+    box-shadow:0 12px 32px rgba(21,36,31,.28);
+    display:flex;align-items:center;gap:10px;
+    opacity:0;pointer-events:none;transition:opacity .22s,transform .22s;z-index:50;max-width:90vw;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast svg{width:16px;height:16px;color:var(--gold);flex:none}
+  .toast b{font-weight:700;color:#fff}
+
   .fade{opacity:0;transform:translateY(10px);animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
   @keyframes rise{to{opacity:1;transform:none}}
   .d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
@@ -450,8 +464,21 @@
   </main>
 </div>
 
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6z"/><path d="m9 12 2 2 4-4"/></svg>
+  <span><b>Included in your build.</b> This is a preview of the Overview — the full version unlocks every section.</span>
+</div>
+
 <script>
 (function(){
+  // demo: make placeholder links feel intentional instead of dead
+  var toast=document.getElementById('toast'),tT;
+  function ping(){clearTimeout(tT);toast.classList.add('show');tT=setTimeout(function(){toast.classList.remove('show');},2600);}
+  document.querySelectorAll('.nav a:not(.on), .card-act, .area-pick, .demo-tag').forEach(function(el){
+    el.style.cursor='pointer';
+    el.addEventListener('click',function(e){e.preventDefault();ping();});
+  });
+
   // count-up KPIs
   var els=document.querySelectorAll('[data-count]');
   els.forEach(function(el){
